@@ -23,7 +23,7 @@ templates = Jinja2Templates(directory='templates')
 def main(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 @app.post("/submitform")
-async def util(data:Form):
+def util(data:Form):
     name = data.name
     email = data.email
     num_videos = data.num_videos
