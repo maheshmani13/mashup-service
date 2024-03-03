@@ -9,14 +9,14 @@ import random
 import shutil
 random.seed(5)
 app = FastAPI()
-origins = ["*"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
+# origins = ["*"]
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"]
+# )
 app.mount("/static", StaticFiles(directory='static'), name='static')
 templates = Jinja2Templates(directory='templates')
 @app.route("/", methods=["GET", "POST"])

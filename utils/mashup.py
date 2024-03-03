@@ -64,10 +64,12 @@ def select_audio_duration(audio_streams ,time):
     selected_durations = []
 
     for audio_stream in audio_streams:
-        audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp4")
+        print("hello")
+        audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp3")
         audio = AudioFileClip(audio_file)
-        duration = min(audio.duration, time)  # Minimum of 30 seconds or total duration
+        duration = min(audio.duration, time)
         selected_durations.append(duration)
+    print("helllo")
 
     return selected_durations
 
@@ -108,4 +110,4 @@ def merge_audio_streams(audio_streams, selected_durations, output_file , email):
     print(f"Output file '{output_file}' created successfully.")
     send_email(email , "Audio From Mashup Site" , "Enjoy your Mashup" , output_file)
     shutil.rmtree('audios')
-
+    return
