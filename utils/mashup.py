@@ -11,6 +11,7 @@ from email.mime.application import MIMEApplication
 import smtplib
 import shutil
 from dotenv import load_dotenv
+from http.client import IncompleteRead
 
 # Load environment variables from .env file
 load_dotenv()
@@ -64,11 +65,13 @@ def select_audio_duration(audio_streams ,time):
     selected_durations = []
 
     for audio_stream in audio_streams:
-        print("hello")
-        audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp3")
-        audio = AudioFileClip(audio_file)
-        duration = min(audio.duration, time)
-        selected_durations.append(duration)
+        try:
+            audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp3")
+            audio = AudioFileClip(audio_file)
+            duration = min(audio.duration, time)
+            selected_durations.append(duration)
+        except IncompleteRead as e:
+            continue
     print("helllo")
 
     return selected_durations
