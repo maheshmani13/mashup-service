@@ -59,6 +59,7 @@ def download_audio_streams(video_urls):
             print(f"Video {url} is age-restricted. Skipping...")
             continue
           except Exception as e:
+            print(e)
             continue
     return audio_streams
 
@@ -76,12 +77,12 @@ def select_audio_duration(audio_streams ,time):
             selected_durations.append(duration)
             i = i + 1
             audio_streams1.append(audio_stream)
-        except IncompleteRead as e:
-            continue
+        
         except Exception as e:
+            print(e)
             continue
-    print("helllo")
 
+    
     return [selected_durations, audio_streams1]
 
 
