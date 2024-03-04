@@ -34,7 +34,9 @@ def util(data:Form):
     video_links = search_videos(name, num_videos)
     print(video_links)
     streams =  download_audio_streams(video_links)
-    selected =  select_audio_duration(streams, duration)
+
+    [selected, streams] =  select_audio_duration(streams, duration)
+
     merge_audio_streams(streams ,selected ,f'audios/audio{temp_folder}.mp3' , email)
     
     

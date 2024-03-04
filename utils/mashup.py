@@ -58,28 +58,37 @@ def download_audio_streams(video_urls):
           except AgeRestrictedError:
             print(f"Video {url} is age-restricted. Skipping...")
             continue
+          except Exception as e:
+            continue
     return audio_streams
 
 def select_audio_duration(audio_streams ,time):
     print("Selecting appropriate audio duration...")
     selected_durations = []
+    i = 0
+    audio_streams1 = []
 
     for audio_stream in audio_streams:
         try:
-            audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp3")
+            audio_file = audio_stream.download(output_path="audios", filename=f"audio_{i+1}.mp3")
             audio = AudioFileClip(audio_file)
             duration = min(audio.duration, time)
             selected_durations.append(duration)
+            i = i + 1
+            audio_streams1.append(audio_stream)
         except IncompleteRead as e:
+            continue
+        except Exception as e:
             continue
     print("helllo")
 
-    return selected_durations
+    return [selected_durations, audio_streams1]
 
 
 def send_email(email, subject, body, attachment_path):
     # Create the email message
     msg = MIMEMultipart()
+
     msg['From'] =USERNAME 
     msg['To'] = email
     msg['Subject'] = subject
