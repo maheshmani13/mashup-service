@@ -35,9 +35,9 @@ def util(data:Form):
     print(video_links)
     streams =  download_audio_streams(video_links)
 
-    [selected, streams] =  select_audio_duration(streams, duration)
+    [selected, streams] =  select_audio_duration(streams, duration , temp_folder)
 
-    merge_audio_streams(streams ,selected ,f'audios/audio{temp_folder}.mp3' , email)
+    merge_audio_streams(streams ,selected ,f'audios{temp_folder}/audio{temp_folder}.mp3' , email , temp_folder)
     
     
     return RedirectResponse(url="/")

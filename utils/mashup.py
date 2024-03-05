@@ -63,7 +63,7 @@ def download_audio_streams(video_urls):
             continue
     return audio_streams
 
-def select_audio_duration(audio_streams ,time):
+def select_audio_duration(audio_streams ,time , folder):
     print("Selecting appropriate audio duration...")
     selected_durations = []
     i = 0
@@ -71,7 +71,7 @@ def select_audio_duration(audio_streams ,time):
 
     for audio_stream in audio_streams:
         try:
-            audio_file = audio_stream.download(output_path="audios", filename=f"audio_{i+1}.mp3")
+            audio_file = audio_stream.download(output_path=f"audios{folder}", filename=f"audio_{i+1}.mp3")
             audio = AudioFileClip(audio_file)
             duration = min(audio.duration, time)
             selected_durations.append(duration)
@@ -110,17 +110,21 @@ def send_email(email, subject, body, attachment_path):
         server.sendmail(USERNAME , email, msg.as_string())
 
 
-def merge_audio_streams(audio_streams, selected_durations, output_file , email):
+def merge_audio_streams(audio_streams, selected_durations, output_file , email , folder):
     print("Merging audio streams...")
     combined_audio = AudioSegment.empty()
 
     for audio_stream, duration in zip(audio_streams, selected_durations):
-        audio_file = audio_stream.download(output_path="audios", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp4")
-        audio = AudioSegment.from_file(audio_file)
-        combined_audio += audio[:int(duration * 1000)]  # Convert seconds to milliseconds
+        try : 
+          audio_file = audio_stream.download(output_path=f"audios{folder}", filename=f"audio_{audio_streams.index(audio_stream)+1}.mp4")
+          audio = AudioSegment.from_file(audio_file)
+          combined_audio += audio[:int(duration * 1000)] 
+        except Exception as e:
+          print(e)
+          continue # Convert seconds to milliseconds
 
     combined_audio.export(output_file, format="mp3")
     print(f"Output file '{output_file}' created successfully.")
     send_email(email , "Audio From Mashup Site" , "Enjoy your Mashup" , output_file)
-    shutil.rmtree('audios')
+    shutil.rmtree(f'audios{folder}')
     return
