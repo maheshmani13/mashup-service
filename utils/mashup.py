@@ -21,15 +21,23 @@ PASSWORD = os.environ.get("MAIL_PASSWORD")
 PORT = os.environ.get("MAIL_PORT")
 
 def search_videos(search_term: str, num: int):
+ 
   search_term = search_term + str(" songs")
   encoded_query = quote(search_term)
   # print(encoded_query)
   html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + encoded_query)
   video_ids = list(set(re.findall(r"watch\?v=(\S{11})", html.read().decode())))
   video_links = []
+  
   for id in range(int(num)):
-    video_links.append("https://www.youtube.com/watch?v=" + video_ids[id])
+      try :
+        video_links.append("https://www.youtube.com/watch?v=" + video_ids[id])
+      except Exception as e:
+        print("No videos found")
+        continue
+
   return video_links[0:num]
+  
 
 def clean_string(input_string: str):
     # Define the regular expression pattern
